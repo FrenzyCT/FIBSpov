@@ -1,0 +1,13 @@
+# created by virtualenv automatically
+*# Python
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+
+# Database
+database.db
+
+# IDE
+.idea/

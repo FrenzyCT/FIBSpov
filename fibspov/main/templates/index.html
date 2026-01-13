@@ -22,16 +22,11 @@
         <div id="directCount" class="count">{{ counts.direct }}</div>
         <button onclick="increment('direct')">Registrer Direkte</button>
     </div>
-
-    <div class="card">
+</div>
+    <div class="reset-area">
         <h2>🧹 Swipe </h2>
         <button onclick="resetCounts()">Nullstill</button>
     </div>
-
-
-
-</div>
-
 <script>
     function resetCounts() {
         fetch("/reset", {
@@ -40,21 +35,47 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById("phoneCount").innerText =data.phone;
-                document.getElementById("phoneCount").innerText =data.direct;
+                document.getElementById("directCount").innerText =data.direct;
             })
     }
 </script>
 
-<script> function increment(counter) {
-    fetch(`/count/${counter}`, { method: "POST" })
-        .then(response => response.json())
-        .then(data => { if (counter === "phone")
-        { document.getElementById("phoneCount").innerText = data.value; }
-        else if (counter === "direct") {
-            document.getElementById("directCount").innerText = data.value;
-        }
-    });
-}
+<script>
+    function showAchievement() {
+        const box = document.getElementById("achievement");
+
+        box.classList.remove("hidden");
+
+        setTimeout(() => {
+            box.classList.add("show");
+        }, 10);
+
+        setTimeout(() => {
+            box.classList.remove("show");
+            setTimeout(() => box.classList.add("hidden"), 400);
+        }, 3000);
+    }
+
+    function increment(counter) {
+        fetch(`/count/${counter}`, {method: "POST"})
+            .then(response => response.json())
+            .then(data => {
+                const countId = counter + "Count";
+                document.getElementById(countId).innerText = data.value;
+
+                //Trigger achievement for direkte hver 10 gang
+                if (data.value % 10 === 0) {
+                    showAchievement();
+                }
+            });
+    }
+
 </script>
+
+<div id="achievement" class="achievement hidden">
+    <img src="/static/omg.jpeg" alt="Achievement">
+    <p>OMG you did it!</p>
+</div>
+
 </body>
 </html>

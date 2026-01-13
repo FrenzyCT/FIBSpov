@@ -34,8 +34,7 @@ def count(counter):
 def reset():
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("""
-       UPDATE counts SET value=0 WHERE name IN ('phone', 'direct'""")
+    cursor.execute("UPDATE counts SET value=0 WHERE name IN ('phone', 'direct')")
     conn.commit()
 
     cursor.execute("SELECT name, value FROM counts")
@@ -43,5 +42,4 @@ def reset():
     counts = {row["name"]: row["value"] for row in rows}
     return jsonify(counts)
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+
