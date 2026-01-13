@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Body count</title>
+    <link rel="stylesheet" href="{{ url_for('static' , filename='stilig.css') }}">
+</head>
+<body>
+
+<h1>Kundesupport - Live Teller</h1>
+
+<div class="container">
+
+    <div class="card">
+        <h2>📞 Telefonsamtaler</h2>
+        <div id="phoneCount" class="count">{{ counts.phone }}</div>
+        <button onclick="increment('phone')">Registrer Telefon</button>
+    </div>
+
+    <div class="card">
+        <h2>💬 Direkte henvendelser</h2>
+        <div id="directCount" class="count">{{ counts.direct }}</div>
+        <button onclick="increment('direct')">Registrer Direkte</button>
+    </div>
+
+    <div class="card">
+        <h2>🧹 Swipe </h2>
+        <button onclick="resetCounts()">Nullstill</button>
+    </div>
+
+
+
+</div>
+
+<script>
+    function resetCounts() {
+        fetch("/reset", {
+            method: "POST"
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("phoneCount").innerText =data.phone;
+                document.getElementById("phoneCount").innerText =data.direct;
+            })
+    }
+</script>
+
+<script> function increment(counter) {
+    fetch(`/count/${counter}`, { method: "POST" })
+        .then(response => response.json())
+        .then(data => { if (counter === "phone")
+        { document.getElementById("phoneCount").innerText = data.value; }
+        else if (counter === "direct") {
+            document.getElementById("directCount").innerText = data.value;
+        }
+    });
+}
+</script>
+</body>
+</html>
