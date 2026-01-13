@@ -1,1 +1,3 @@
-FLASK
+FLASK>=2.0
+python-dotenv>=0.21
+
