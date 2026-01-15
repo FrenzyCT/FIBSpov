@@ -15,6 +15,10 @@ def init_db():
               VALUE INTEGER
         )
    """)
+
+    cursor.execute("INSERT OR IGNORE INTO counts (name, value) VALUES (?, ?)", ('phone', 0))
+    cursor.execute("INSERT OR IGNORE INTO counts (name, value) VALUES (?, ?)", ('direct', 0))
+
     conn.commit()
     conn.close()
 
