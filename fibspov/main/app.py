@@ -15,6 +15,7 @@ def index():
     cursor = conn.cursor()
     cursor.execute("SELECT name, value FROM counts")
     rows = cursor.fetchall()
+    conn.close()
     counts = {row["name"]: row["value"] for row in rows}
     return render_template("index.html", counts=counts)
 
@@ -39,6 +40,7 @@ def reset():
 
     cursor.execute("SELECT name, value FROM counts")
     rows = cursor.fetchall()
+    conn.close()
     counts = {row["name"]: row["value"] for row in rows}
     return jsonify(counts)
 
