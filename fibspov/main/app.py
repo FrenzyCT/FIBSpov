@@ -51,6 +51,8 @@ def reset():
     cursor.close()
     conn.close()
 
+    conn.close()
+    counts = {row[0]: row[1] for row in rows}
     return jsonify(counts)
 
 

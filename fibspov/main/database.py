@@ -1,7 +1,4 @@
 import sqlite3
-import os
-import psycopg2
-
 
 def get_db():
     db_url = os.getenv("DATABASE_URL")
