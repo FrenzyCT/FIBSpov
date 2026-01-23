@@ -15,18 +15,25 @@ def index():
     cursor = conn.cursor()
     cursor.execute("SELECT name, value FROM counts")
     rows = cursor.fetchall()
-    counts = {row["name"]: row["value"] for row in rows}
+    counts = {row[0]: row[1] for row in rows}
+
+    cursor.close()
+    conn.close()
+
     return render_template("index.html", counts=counts)
 
 @app.route('/count/<counter>', methods=['POST'])
 def count(counter):
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("UPDATE counts SET value = value + 1 WHERE name = ?", (counter,))
+    cursor.execute("UPDATE counts SET value = value + 1 WHERE name = %s", (counter,))
     conn.commit()
 
-    cursor.execute("SELECT value FROM counts WHERE name = ?", (counter,))
-    value = cursor.fetchone()["value"]
+    cursor.execute("SELECT value FROM counts WHERE name = %s", (counter,))
+    value = cursor.fetchone()[0] #PostgreSQL returns a tuple, not dicts
+
+    cursor.close()
+    conn.close()
 
     return jsonify({"name": counter, "value": value})
 
@@ -39,7 +46,11 @@ def reset():
 
     cursor.execute("SELECT name, value FROM counts")
     rows = cursor.fetchall()
-    counts = {row["name"]: row["value"] for row in rows}
+    counts = {row[0]: row[1] for row in rows}
+
+    cursor.close()
+    conn.close()
+
     return jsonify(counts)
 
 

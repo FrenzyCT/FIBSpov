@@ -1,8 +1,11 @@
 import sqlite3
+import os
+import psycopg2
+
 
 def get_db():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
+    db_url = os.getenv("DATABASE_URL")
+    conn = psycopg2.connect(db_url)
     return conn
 
 def init_db():
@@ -15,8 +18,8 @@ def init_db():
               VALUE INTEGER
         )
    """)
-    cursor.execute("INSERT OR IGNORE INTO counts (name, value) VALUES ('phone', 0)")
-    cursor.execute("INSERT OR IGNORE INTO counts (name, value) VALUES ('direct', 0)")
+    cursor.execute("INSERT OR IGNORE INTO counts (name, value) VALUES (%s, %s) ON CONFLICT (name) DO NOTHING", ('phone', 0))
+    cursor.execute("INSERT OR IGNORE INTO counts (name, value) VALUES (%s, %s) ON CONFLICT (name) DO NOTHING", ('direct', 0))
     conn.commit()
     conn.close()
 
