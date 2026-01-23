@@ -1,6 +1,5 @@
 import os
 import sqlite3
-
 import psycopg2
 
 
@@ -13,14 +12,22 @@ def init_db():
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS counts (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              name TEXT UNIQUE,
-              VALUE INTEGER
-        )
+        CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            name TEXT UNIQUE,
+            is_admin BOOLEAN DEFAULT FALSE
+        );
    """)
-    cursor.execute("INSERT OR IGNORE INTO counts (name, value) VALUES (%s, %s) ON CONFLICT (name) DO NOTHING", ('phone', 0))
-    cursor.execute("INSERT OR IGNORE INTO counts (name, value) VALUES (%s, %s) ON CONFLICT (name) DO NOTHING", ('direct', 0))
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS counts (
+        id SERIAL PRIMARY KEY,
+        name TEXT,
+        value INTEGER,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+    );
+""")
+
     conn.commit()
     conn.close()
 
