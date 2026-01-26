@@ -26,6 +26,6 @@ def init_db():
         """, ("phone", 0, "direct", 0)) 
     
     conn.commit()
-    cur.close()
+    cursor.close()
     conn.close()
 
