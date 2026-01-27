@@ -28,8 +28,11 @@ def register():
     conn.close()
 
     if existing:
-        flash("Brukeren er allerede logget inn")
-        return redirect("/register")
+        session["user"] = name
+        session["user_id"] = existing[0]
+        flash("Velkommen tilbake, " + name)
+        return redirect("/")
+
     #make a user
     create_user(name)
 
