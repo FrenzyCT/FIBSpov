@@ -14,6 +14,11 @@ def register_page():
     )
 @app.route('/register', methods=['POST'])
 def register():
+    invite = request.form.get("invite")
+    if invite != os.getenv("INVITE_CODE"):
+        flash("Ugyldig invitasjonkode")
+        return redirect("/register")
+
     name = request.form.get("name")
 
     if not name:
