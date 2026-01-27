@@ -8,6 +8,9 @@
 <body>
 
 <h1>Kundesupport - Live Teller</h1>
+<p style="text-align: center; margin-top: 20px;">
+    Logget inn som: {{ session["user"] }}
+</p>
 
 <div class="container">
 
@@ -26,6 +29,9 @@
     <div class="reset-area">
         <button onclick="resetCounts()">Nullstill</button>
     </div>
+<form action="/logout" method="GET">
+    <button type="submit">Logg ut</button>
+</form>
 <script>
     function resetCounts() {
         fetch("/reset", {
