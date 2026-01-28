@@ -14,12 +14,8 @@ def register_page():
     )
 @app.route('/register', methods=['POST'])
 def register():
-    invite = request.form.get("invite")
-    if invite != os.getenv("INVITE_CODE"):
-        flash("Ugyldig invitasjonkode")
-        return redirect("/register")
-
     name = request.form.get("name")
+    invite = request.form.get("invite")
 
     if not name:
         flash("Ikke gyldig navn eller passord FIBS kriger")
@@ -37,6 +33,10 @@ def register():
         session["user_id"] = existing[0]
         flash("Velkommen tilbake, " + name)
         return redirect("/")
+
+    if invite != os.getenv("INVITE_CODE"):
+        flash("Ugyldig invitasjonkode")
+        return redirect("/register")
 
     #make a user
     create_user(name)
